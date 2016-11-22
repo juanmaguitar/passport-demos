@@ -12,7 +12,8 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
 const session = require('express-session')
 
-require('dotenv').config()
+const dotenv = require('dotenv');
+require('dotenv').load()
 
 const routerAuthGoogle = require('./routes/auth/google')
 const routerAuthFacebook = require('./routes/auth/facebook')
