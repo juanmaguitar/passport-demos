@@ -1,24 +1,30 @@
-## quick start
+# Passport Demos
 
-1. `$ git clone git@github.com:mjhea0/node-bootstrap3-template.git your_app`
-2. `$ cd your_app`
-3. `$ npm install`
-4. `$ node app`
+## Description
 
-### desktop version
+This repo contains several demos of using passport to authenticate users using several methods (providers)
+- Local authentication (w/ Login & Register pages)
+- Google
+- Facebook
+- Twitter
+- Github
 
-![main](https://raw.github.com/mjhea0/node-bootstrap3-template/master/screenshots/main.png)
+## Launch project locally
 
-### mobile version 1
+First of all you should start the MongoDB daemon w/ some command like (specify your own path)
 
-![mobile1](https://raw.github.com/mjhea0/node-bootstrap3-template/master/screenshots/mobile1.png)
+    mongod --dbpath ~/data/db
 
-### mobile version 2
+To launch project w/ local auth you can do...
 
-![mobile2](https://raw.github.com/mjhea0/node-bootstrap3-template/master/screenshots/mobile2.png)
+    npm run dev:local
+
+To launch project w/ social auth (google, twitter,... ) you can do...
+
+    npm run dev:social
 
 
-
-http://mherman.org/blog/2013/11/10/social-authentication-with-passport-dot-js/
-http://passportjs.org/docs/google
-https://scotch.io/tutorials/easy-node-authentication-google
+## Resources
+- http://mherman.org/blog/2013/11/10/social-authentication-with-passport-dot-js/
+- http://passportjs.org/docs/google
+- https://scotch.io/tutorials/easy-node-authentication-google

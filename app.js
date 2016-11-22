@@ -28,7 +28,7 @@ const PORT = process.env.PORT || 1337;
 
 
 app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.use( logger('dev') );
 app.use( bodyParser.json() );
@@ -53,40 +53,43 @@ app.use(express.static(path.join(__dirname, 'public')));
 // mongo model
 // var Model_Name = require('add_your_models_here');
 
-/* @begin LOCAL */
-var Account = require('./models/account');
-passport.use( new LocalStrategy( Account.authenticate() ) );
-passport.serializeUser( Account.serializeUser() );
-passport.deserializeUser( Account.deserializeUser() );
+const AUTH = process.env.AUTH || 'local';
 
-const routerAuthLocal = require('./routes/auth/local')
-app.use('/local', routerAuthLocal)
+if (AUTH === 'local') {
+	/* @begin LOCAL */
+	var Account = require('./models/account');
+	passport.use( new LocalStrategy( Account.authenticate() ) );
+	passport.serializeUser( Account.serializeUser() );
+	passport.deserializeUser( Account.deserializeUser() );
 
-/* @end LOCAL */
+	const routerAuthLocal = require('./routes/auth/local')
+	app.use('/local', routerAuthLocal)
+	/* @end LOCAL */
+}
+else if (AUTH === 'social') {
+	/* @begin SOCIAL MEDIA */
+	const routerAuthGoogle = require('./routes/auth/social/google')
+	const routerAuthFacebook = require('./routes/auth/social/facebook')
+	const routerAuthGithub = require('./routes/auth/social/github')
+	const routerAuthTwitter = require('./routes/auth/social/twitter')
 
-/* @begin SOCIAL MEDIA */
-// const routerAuthGoogle = require('./routes/auth/social/google')
-// const routerAuthFacebook = require('./routes/auth/social/facebook')
-// const routerAuthGithub = require('./routes/auth/social/github')
-// const routerAuthTwitter = require('./routes/auth/social/twitter')
-
-// app.use('/auth/google', routerAuthGoogle)
-// app.use('/auth/facebook', routerAuthFacebook)
-// app.use('/auth/github', routerAuthGithub)
-// app.use('/auth/twitter', routerAuthTwitter)
-/* @end SOCIAL MEDIA */
-
+	app.use('/auth/google', routerAuthGoogle)
+	app.use('/auth/facebook', routerAuthFacebook)
+	app.use('/auth/github', routerAuthGithub)
+	app.use('/auth/twitter', routerAuthTwitter)
+	/* @end SOCIAL MEDIA */
+}
 
 // connect to the database
 mongoose.connect('mongodb://localhost/passport-example');
 
 
-
-
 // routes
 
 app.get('/', function (req, res) {
-    res.render('index', { user : req.user });
+	const user = req.user;
+	const auth_method = AUTH;
+  res.render('index', { user, auth_method });
 });
 
 //app.get('/', (req, res) =>  res.render('index') );
