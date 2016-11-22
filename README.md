@@ -18,3 +18,7 @@
 ![mobile2](https://raw.github.com/mjhea0/node-bootstrap3-template/master/screenshots/mobile2.png)
 
 
+
+http://mherman.org/blog/2013/11/10/social-authentication-with-passport-dot-js/
+http://passportjs.org/docs/google
+https://scotch.io/tutorials/easy-node-authentication-google
