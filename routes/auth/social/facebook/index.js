@@ -1,5 +1,5 @@
 const express = require('express');
-const passport = require('../passport.js')
+const passport = require('../passport.js') // passport w/ loaded strategies
 
 const router = express.Router();
 

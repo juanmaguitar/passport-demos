@@ -17,8 +17,7 @@ module.exports = {
   google: {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://127.0.0.1:1337/auth/google/callback',
-    passReqToCallback: true
+    callbackURL: 'http://127.0.0.1:1337/auth/google/callback'
   }
   // instagram: {
   //   clientID: 'get_your_own',
