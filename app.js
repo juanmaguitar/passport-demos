@@ -6,7 +6,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const passport = require('passport')
 
-var LocalStrategy = require('passport-local').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -20,23 +20,11 @@ if ( fs.existsSync('.env') ) { // exists
 	require('dotenv').load()
 }
 
-// passport config
-var Account = require('./models/account');
-passport.use(new LocalStrategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
-
-// connect to the database
-mongoose.connect('mongodb://localhost/passport-example');
-
-const routerAuthGoogle = require('./routes/auth/social/google')
-const routerAuthFacebook = require('./routes/auth/social/facebook')
-const routerAuthGithub = require('./routes/auth/social/github')
-const routerAuthTwitter = require('./routes/auth/social/twitter')
-
 // global config
 const app = express();
 const PORT = process.env.PORT || 1337;
+
+// passport config
 
 
 app.set('views', __dirname + '/views');
@@ -65,10 +53,43 @@ app.use(express.static(path.join(__dirname, 'public')));
 // mongo model
 // var Model_Name = require('add_your_models_here');
 
+/* @begin LOCAL */
+var Account = require('./models/account');
+passport.use( new LocalStrategy( Account.authenticate() ) );
+passport.serializeUser( Account.serializeUser() );
+passport.deserializeUser( Account.deserializeUser() );
+
+const routerAuthLocal = require('./routes/auth/local')
+app.use('/local', routerAuthLocal)
+
+/* @end LOCAL */
+
+/* @begin SOCIAL MEDIA */
+// const routerAuthGoogle = require('./routes/auth/social/google')
+// const routerAuthFacebook = require('./routes/auth/social/facebook')
+// const routerAuthGithub = require('./routes/auth/social/github')
+// const routerAuthTwitter = require('./routes/auth/social/twitter')
+
+// app.use('/auth/google', routerAuthGoogle)
+// app.use('/auth/facebook', routerAuthFacebook)
+// app.use('/auth/github', routerAuthGithub)
+// app.use('/auth/twitter', routerAuthTwitter)
+/* @end SOCIAL MEDIA */
+
+
+// connect to the database
+mongoose.connect('mongodb://localhost/passport-example');
+
+
 
 
 // routes
-app.get('/', (req, res) =>  res.render('index') );
+
+app.get('/', function (req, res) {
+    res.render('index', { user : req.user });
+});
+
+//app.get('/', (req, res) =>  res.render('index') );
 //app.get('/ping', routes.ping);
 
 app.get('/account', isAuthenticated, (req, res) => {
@@ -91,11 +112,6 @@ app.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/');
 });
-
-app.use('/auth/google', routerAuthGoogle)
-app.use('/auth/facebook', routerAuthFacebook)
-app.use('/auth/github', routerAuthGithub)
-app.use('/auth/twitter', routerAuthTwitter)
 
 // run server
 app.listen( PORT, () => console.log(`Listening on port ${PORT}...`) );

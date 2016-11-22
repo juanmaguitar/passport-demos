@@ -11,7 +11,16 @@ block content
           p.lead Say something worthwhile here.
           a(href="/") Go home
           br
-          a(href="/ping") Ping
+          h2 Local Auth
+          if (!user)
+            a(href="/local/login") Login
+            br
+            a(href="/local/register") Register
+          if (user)
+            p You are currently logged in as #{user.username}
+            a(href="/local/logout") Logout
+          br
+          h2 Social Auth
           br
           a(href="/auth/google") Login via Google    
           br
